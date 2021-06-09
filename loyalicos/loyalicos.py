@@ -30,7 +30,7 @@ class LoyalicosAPIClient(Interface):
         else:
             api_client = os.environ.get('LOYALICOS_API_CLIENT')
             api_secret = os.environ.get('LOYALICOS_API_SECRET')
-            api_client = "d20ap"
+            api_client = "loyalicos_admin"
             api_secret = "masvmgc7"
             if api_client == None or api_secret == None:
                 raise NoCredentialsFoundError
