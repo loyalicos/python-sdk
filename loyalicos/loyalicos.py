@@ -22,24 +22,27 @@ class LoyalicosAPIClient(Interface):
 
     """
 
-    def __init__(self, api_key=None, user_token={}, host="http://192.168.56.1:2020"):
+    def __init__(self, api_key=None, user_token={}, host=None):
         self.user_token = user_token
-        self.api_key = api_key or os.environ.get('LOYALICOS_API_KEY')
+        self.host = host 
+        if self.host == None:
+            self.host = os.environ.get('LOYALICOS_API_HOST')
+        self.api_key = api_key 
+        if self.api_key == None:
+            self.api_key = os.environ.get('LOYALICOS_API_KEY')
         if self.api_key != None:
             auth = 'Bearer {}'.format(self.api_key)
         else:
             api_client = os.environ.get('LOYALICOS_API_CLIENT')
             api_secret = os.environ.get('LOYALICOS_API_SECRET')
-            api_client = "loyalicos_admin"
-            api_secret = "masvmgc7"
             if api_client == None or api_secret == None:
                 raise NoCredentialsFoundError
             else:
-                auth_response = requests.get(f'{host}/oauth/authapi', auth=requests.auth.HTTPBasicAuth(api_client, api_secret))
+                auth_response = requests.get(f'{self.host}/oauth/authapi', auth=requests.auth.HTTPBasicAuth(api_client, api_secret))
                 auth_result = auth_response.json()
-                self.api_token = auth_result.get('token')
-                auth = 'Bearer {}'.format(self.api_token)
-        super(LoyalicosAPIClient, self).__init__(host, auth)
+                self.api_key = auth_result.get('token')
+                auth = 'Bearer {}'.format(self.api_key)
+        super(LoyalicosAPIClient, self).__init__(self.host, auth)
 
 class Member(LoyalicosAPIClient):
     """
