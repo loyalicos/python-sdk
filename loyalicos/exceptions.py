@@ -14,6 +14,28 @@ class NoCredentialsFoundError(Exception):
     #     return f'{self.salary} -> {self.message}'
 
 
+class MemberNotFoundError(Exception):
+    """Raised when no Member not found"""
+
+    def __init__(self, message="Member not found"):
+        self.message = message
+        super().__init__(self.message)
+
+    # def __str__(self):
+    #     return f'{self.salary} -> {self.message}'
+
+
+class DuplicateKeyForMemberError(Exception):
+    """Raised when the same key is created twice"""
+
+    def __init__(self, message="Member duplicate key"):
+        self.message = message
+        super().__init__(self.message)
+
+    # def __str__(self):
+    #     return f'{self.salary} -> {self.message}'
+
+
 class RequestNotReadyError(Exception):
     """Raised when an imcomplete request is sent"""
 
