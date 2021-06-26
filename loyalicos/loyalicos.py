@@ -23,11 +23,15 @@ class LoyalicosAPIClient(Interface):
 
     """
 
-    def __init__(self, api_key=None, user_token={}, host=None):
+    def __init__(self, api_key=None, user_token={}, host=None, client_id=None, secret=None):
         self.user_token = user_token
         self.host = host 
-        self.api_client = os.environ.get('LOYALICOS_API_CLIENT')
-        self.api_secret = os.environ.get('LOYALICOS_API_SECRET')
+        self.api_client = client_id 
+        self.api_secret = secret 
+        if self.host == None:
+            self.api_client = os.environ.get('LOYALICOS_API_CLIENT')
+        if self.host == None:
+            self.api_secret = os.environ.get('LOYALICOS_API_SECRET')
         if self.host == None:
             self.host = os.environ.get('LOYALICOS_API_HOST')
         self.api_key = api_key 
