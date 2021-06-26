@@ -28,9 +28,9 @@ class LoyalicosAPIClient(Interface):
         self.host = host 
         self.api_client = client_id 
         self.api_secret = secret 
-        if self.host == None:
+        if self.api_client == None:
             self.api_client = os.environ.get('LOYALICOS_API_CLIENT')
-        if self.host == None:
+        if self.api_secret == None:
             self.api_secret = os.environ.get('LOYALICOS_API_SECRET')
         if self.host == None:
             self.host = os.environ.get('LOYALICOS_API_HOST')
