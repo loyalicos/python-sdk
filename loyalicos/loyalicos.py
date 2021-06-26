@@ -14,6 +14,7 @@ import os
 import requests
 from .interface import Interface
 from .exceptions import *
+import params
 
 class LoyalicosAPIClient(Interface):
     """ Loyaicos basic API client Object
@@ -28,13 +29,15 @@ class LoyalicosAPIClient(Interface):
         self.host = host 
         self.api_client = client_id 
         self.api_secret = secret 
-        print(os.environ)
         if self.api_client == None:
-            self.api_client = os.environ.get('LOYALICOS_API_CLIENT')
+            # self.api_client = os.environ.get('LOYALICOS_API_CLIENT')
+            self.api_client = params.LOYALICOS_API_CLIENT
         if self.api_secret == None:
-            self.api_secret = os.environ.get('LOYALICOS_API_SECRET')
+            # self.api_secret = os.environ.get('LOYALICOS_API_SECRET')
+            self.api_secret = params.LOYALICOS_API_SECRET
         if self.host == None:
-            self.host = os.environ.get('LOYALICOS_API_HOST')
+            # self.host = os.environ.get('LOYALICOS_API_HOST')
+            self.host = params.LOYALICOS_API_HOST
         self.api_key = api_key 
         if self.api_key == None:
             self.api_key = os.environ.get('LOYALICOS_API_KEY')
