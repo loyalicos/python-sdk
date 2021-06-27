@@ -140,9 +140,9 @@ class Member(LoyalicosAPIClient):
             raise HTTPRequestError
         self.access_token = self.response.body
 
-class Transaction(LoyalicosAPIClient):
+class Event(LoyalicosAPIClient):
     """
-        Extends API Client to handle transactions
+        Extends API Client to handle events
     """
     def __init__(self, partner_code,activity, type, channel,  member_id='', subactivity=None, subtype=None, subchannel=None, currency=None, date_activity=None, items=[], api_key=None, user_token={}, host=None):
         self.partner_code = partner_code
@@ -156,7 +156,7 @@ class Transaction(LoyalicosAPIClient):
         self.currency = currency
         self.date_activity = date_activity
         self.items = items
-        super(Transaction, self).__init__(api_key, user_token, host)
+        super(Event, self).__init__(api_key, user_token, host)
 
     def make_body(self, format='json'):
         if format=='json':
@@ -175,16 +175,16 @@ class Transaction(LoyalicosAPIClient):
                 }
 
 
-    def earn(self, member_id='', date_activity=None):
+    def loyalize(self, member_id='', date_activity=None):
         """
-            Send accrual transaction
+            Loyalize event
         """
         if member_id != '':
            self.external_id = member_id
         if date_activity != None:
            self.date_activity = date_activity
         self.method = 'PUT'
-        self.path = ['points', 'accrue']
+        self.path = ['loyalize']
         self.make_body('json')
         self.send_request()
         if self.response.status_code != 200:
