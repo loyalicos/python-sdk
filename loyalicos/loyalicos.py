@@ -144,7 +144,7 @@ class Event(LoyalicosAPIClient):
     """
         Extends API Client to handle events
     """
-    def __init__(self, partner_code,activity, type, channel,  member_id='', subactivity=None, subtype=None, subchannel=None, currency=None, date_activity=None, items=[], api_key=None, user_token={}, host=None):
+    def __init__(self, partner_code='',activity=None, type=None, channel=None,  member_id='', subactivity=None, subtype=None, subchannel=None, currency=None, date_activity=None, items=[], api_key=None, user_token={}, host=None):
         self.partner_code = partner_code
         self.external_id = member_id
         self.activity = activity
@@ -191,7 +191,7 @@ class Event(LoyalicosAPIClient):
             raise HTTPRequestError
         self.id = self.response.body['trx_id']
 
-    def redeem(self, member_id='', user_token={}, date_activity=None):
+    def reward(self, member_id='', user_token={}, date_activity=None):
         """
             Send redemption transaction
         """
@@ -201,11 +201,11 @@ class Event(LoyalicosAPIClient):
            self.date_activity = date_activity
         self.user_token.update(user_token)
         self.method = 'PUT'
-        self.path = ['points', 'redeem']
+        self.path = ['reward']
         self.make_body('json')
-        self.send_request()
         user_auth = {'Access-Token' : self.user_token['access_token']}
         self.update_headers(user_auth)
+        self.send_request()
         if self.response.status_code != 200:
             raise HTTPRequestError
         self.id = self.response.body['trx_id']
