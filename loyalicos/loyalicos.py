@@ -110,6 +110,21 @@ class Member(LoyalicosAPIClient):
         
 
     """
+        Get a Member balance per type
+    """
+    def check_event(self, user_token={}):
+        self.user_token.update(user_token)
+        self.method = 'POST'
+        self.path = ['3PAMI', 'member', 'has_event', self.id]
+        user_auth = {'Access-Token' : self.user_token['access_token']}
+        self.update_headers(user_auth)
+        self.send_request()
+        if self.response.status_code != 200:
+            raise HTTPRequestError
+        self.event_check = self.response.body
+        
+
+    """
         Refresh a member token
     """
     def renew_token(self, user_token={}):
@@ -188,6 +203,7 @@ class Event(LoyalicosAPIClient):
         self.make_body('json')
         self.send_request()
         if self.response.status_code != 200:
+            print(self.response.body)
             raise HTTPRequestError
         self.id = self.response.body['trx_id']
 
