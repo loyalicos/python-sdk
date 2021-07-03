@@ -9,6 +9,7 @@ For the user guide, code examples, and more, visit the main docs page:
 This file provides the Loyalicos API Client.
 """
 
+from time import process_time
 from Loyalicos.loyalicos.simplified_http_client import Response
 import os
 import requests
@@ -112,16 +113,19 @@ class Member(LoyalicosAPIClient):
     """
         Get a Member balance per type
     """
-    def check_event(self, user_token={}):
+    def check_event(self,  id=None, user_token={}, search_params={}):
         self.user_token.update(user_token)
+        if id != None:
+            self.id = id
         self.method = 'POST'
         self.path = ['3PAMI', 'member', 'has_event', self.id]
+        self.json = search_params
         user_auth = {'Access-Token' : self.user_token['access_token']}
         self.update_headers(user_auth)
         self.send_request()
         if self.response.status_code != 200:
             raise HTTPRequestError
-        self.event_check = self.response.body
+        self.event_check = self.response.body.get('result')
         
 
     """
