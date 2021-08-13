@@ -70,7 +70,6 @@ class Member(LoyalicosAPIClient):
         self.path = ['3PAMI', 'membership']
         self.json = {"external_id" : alias}
         self.send_request()
-        print(self.response.body)
         if self.response.status_code != 200:
             if self.response.status_code == 409:
                 raise DuplicateKeyForMemberError
@@ -89,10 +88,24 @@ class Member(LoyalicosAPIClient):
         user_auth = {'Access-Token' : self.user_token['access_token']}
         self.update_headers(user_auth)
         self.send_request()
-        print(self.response.body)
         if self.response.status_code != 200:
             raise HTTPRequestError
         self.profile = self.response.body
+        
+
+    """
+        Get a Member statement
+    """
+    def statement(self, user_token={}):
+        self.user_token.update(user_token)
+        self.method = 'GET'
+        self.path = ['3PAMI', 'statement', self.id]
+        user_auth = {'Access-Token' : self.user_token['access_token']}
+        self.update_headers(user_auth)
+        self.send_request()
+        if self.response.status_code != 200:
+            raise HTTPRequestError
+        self.stmt = self.response.body
         
 
     """
@@ -137,7 +150,6 @@ class Member(LoyalicosAPIClient):
         self.path = ['3PAMI', 'refreshToken']
         self.json = {'grant_type' : 'refresh_token', 'refresh_token' : user_token['refresh_token'] }
         self.send_request()
-        print(self.response.body)
         if self.response.status_code != 200:
             if self.response.status_code == 404:
                 raise MemberNotFoundError
@@ -207,7 +219,6 @@ class Event(LoyalicosAPIClient):
         self.make_body('json')
         self.send_request()
         if self.response.status_code != 200:
-            print(self.response.body)
             raise HTTPRequestError
         self.id = self.response.body['trx_id']
 
