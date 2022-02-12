@@ -9,13 +9,12 @@ For the user guide, code examples, and more, visit the main docs page:
 This file provides the Loyalicos API Client.
 """
 
-from time import process_time
-from Loyalicos.loyalicos.simplified_http_client import Response
+from .simplified_http_client import Response
 import os
 import requests
 from .interface import Interface
 from .exceptions import *
-import params
+import json
 
 class LoyalicosAPIClient(Interface):
     """ Loyaicos basic API client Object
@@ -30,18 +29,18 @@ class LoyalicosAPIClient(Interface):
         self.host = host 
         self.api_client = client_id 
         self.api_secret = secret 
+        conf = {'LOYALICOS_API_CLIENT': None, 'LOYALICOS_API_SECRET': None, 'LOYALICOS_API_HOST':None, 'LOYALICOS_API_KEY':None }
+        env = json.loads(os.environ.get('LOYALICOS_CONF'))
+        conf.update(env)
         if self.api_client == None:
-            # self.api_client = os.environ.get('LOYALICOS_API_CLIENT')
-            self.api_client = params.LOYALICOS_API_CLIENT
+            self.api_client = conf.get('LOYALICOS_API_CLIENT')
         if self.api_secret == None:
-            # self.api_secret = os.environ.get('LOYALICOS_API_SECRET')
-            self.api_secret = params.LOYALICOS_API_SECRET
+            self.api_secret = conf.get('LOYALICOS_API_SECRET')
         if self.host == None:
-            # self.host = os.environ.get('LOYALICOS_API_HOST')
-            self.host = params.LOYALICOS_API_HOST
+            self.host = conf.get('LOYALICOS_API_HOST')
         self.api_key = api_key 
         if self.api_key == None:
-            self.api_key = os.environ.get('LOYALICOS_API_KEY')
+            self.api_key = conf.get('LOYALICOS_API_KEY')
         if self.api_key != None:
             auth = 'Bearer {}'.format(self.api_key)
         else:

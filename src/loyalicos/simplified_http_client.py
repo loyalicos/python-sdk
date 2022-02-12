@@ -1,4 +1,3 @@
-from typing import List
 import requests
 from .exceptions import *
 
@@ -77,7 +76,7 @@ class Client(object):
         return '{}/v{}{}'.format(self.host, str(self._version), url)
 
 
-    def make_request(self, method: str, path: List, json=None, data={}, params={}, timeout=None):
+    def make_request(self, method: str, path: list, json=None, data={}, params={}, timeout=None):
         """Make the API call and return the response.
         :param timeout: timeout value or None
         :type timeout: float
